@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assenze Dicembre 2024</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding: 10px;
+            background-color: #ffffff;
+            max-width: 1880px;
+            margin: 0 auto;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 4px;
+            text-align: center;
+            min-width: 25px;
+            height: 20px;
+        }
+
+        .header-day {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .weekend {
+            color: red;
+        }
+
+        .nome-operatore {
+            text-align: left;
+            padding-left: 5px;
+            font-weight: bold;
+            min-width: 120px;
+        }
+
+        .presente {
+            background-color: red;
+            cursor: pointer;
+        }
+
+        .assente {
+            background-color: #00b0f0;
+            cursor: pointer;
+        }
+
+        .totale {
+            font-weight: bold;
+        }
+
+        .grigio {
+            background-color: #d9d9d9;
+        }
+
+        td:not(.nome-operatore):not(.totale):not(.grigio) {
+            cursor: pointer;
+        }
+
+        .presente, .assente {
+            color: transparent;
+        }
+
+        @media (max-width: 1600px) {
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 3px;
+                min-width: 22px;
+            }
+
+            .nome-operatore {
+                min-width: 100px;
+            }
+        }
+
+        .legenda {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .legenda-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legenda-colore {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .legenda-colore.rosso {
+            background-color: red;
+        }
+
+        .legenda-colore.azzurro {
+            background-color: #00b0f0;
+        }
+
+        .legenda-testo {
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="legenda">
+        <div class="legenda-item">
+            <span class="legenda-colore rosso"></span>
+            <span class="legenda-testo">Non disponibile</span>
+        </div>
+        <div class="legenda-item">
+            <span class="legenda-colore azzurro"></span>
+            <span class="legenda-testo">Disponibile</span>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>DICEMBRE 2024</th>
+                    <th class="weekend">D</th>
+                    <th>L</th>
+                    <th>M</th>
+                    <th>M</th>
+                    <th>G</th>
+                    <th>V</th>
+                    <th class="weekend">S</th>
+                    <th class="weekend">D</th>
+                    <!-- ... continua per tutti i giorni del mese ... -->
+                    <th>TOTALE</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                    <th>7</th>
+                    <th>8</th>
+                    <!-- ... continua per tutti i giorni del mese ... -->
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="nome-operatore">1. Amodio</td>
+                    <td class="grigio"></td>
+                    <td class="presente">1</td>
+                    <td class="presente">1</td>
+                    <td class="presente">1</td>
+                    <td class="presente">1</td>
+                    <td class="presente">1</td>
+                    <td class="grigio"></td>
+                    <td class="grigio"></td>
+                    <!-- ... continua per tutti i giorni ... -->
+                    <td class="totale">20</td>
+                </tr>
+                <!-- ... continua per tutti gli operatori ... -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Funzione per generare l'intestazione della tabella con tutti i giorni
+        function generaIntestazione() {
+            const thead = document.querySelector('thead');
+            thead.innerHTML = ''; // Pulisce l'intestazione esistente
+
+            // Prima riga con le iniziali dei giorni
+            const giorniRow = document.createElement('tr');
+            giorniRow.innerHTML = '<th>DICEMBRE 2024</th>';
+            
+            // Seconda riga con i numeri dei giorni
+            const numeriRow = document.createElement('tr');
+            numeriRow.innerHTML = '<th></th>';
+
+            // Genera tutte le colonne per dicembre 2024
+            const dataInizio = new Date(2024, 11, 1); // 11 = dicembre (0-based)
+            const giorniMese = new Date(2024, 12, 0).getDate(); // Ultimo giorno del mese
+
+            for (let i = 1; i <= giorniMese; i++) {
+                const data = new Date(2024, 11, i);
+                const giorno = data.getDay(); // 0 = domenica, 6 = sabato
+                
+                // Ottieni l'iniziale del giorno
+                const inizialeGiorno = ['D', 'L', 'M', 'M', 'G', 'V', 'S'][giorno];
+                
+                // Aggiungi la colonna con l'iniziale del giorno
+                const isWeekend = (giorno === 0 || giorno === 6);
+                giorniRow.innerHTML += `<th class="${isWeekend ? 'weekend' : ''}">${inizialeGiorno}</th>`;
+                
+                // Aggiungi la colonna con il numero del giorno
+                numeriRow.innerHTML += `<th>${i}</th>`;
+            }
+
+            // Aggiungi la colonna TOTALE
+            giorniRow.innerHTML += '<th>TOTALE</th>';
+            numeriRow.innerHTML += '<th></th>';
+
+            thead.appendChild(giorniRow);
+            thead.appendChild(numeriRow);
+        }
+
+        // Funzione per generare la tabella completa con tutti i dati
+        function generaTabella() {
+            const operatori = [
+                "1. Amodio", "2. Argirò", "3. Barbieri", "4. Bianchi", "5. Bruno",
+                "6. Danza", "7. De Pinto", "8. Lumini", "9. Marcozzi", "10. Marucci",
+                "11. Marziali", "12. Portieri", "13. Priori", "14. Pucci", 
+                "15. Quaranta", "16. Sarcinelli", "17. Sasso", "18. Stivaletta", "19. Zaccaria"
+            ];
+
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            operatori.forEach(operatore => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="nome-operatore">${operatore}</td>`;
+                
+                // Aggiungi celle per ogni giorno del mese
+                for (let i = 1; i <= 31; i++) {
+                    const data = new Date(2024, 11, i);
+                    const giorno = data.getDay();
+                    
+                    if (giorno === 0 || giorno === 6) {
+                        tr.innerHTML += '<td class="grigio"></td>';
+                    } else {
+                        // Aggiungi l'evento click alla cella
+                        tr.innerHTML += '<td onclick="togglePresenza(this)"></td>';
+                    }
+                }
+                
+                tr.innerHTML += '<td class="totale">0</td>';
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Funzione per alternare i colori delle celle
+        function togglePresenza(cella) {
+            if (!cella.classList.contains('presente') && !cella.classList.contains('assente')) {
+                cella.classList.add('presente');
+            } else if (cella.classList.contains('presente')) {
+                cella.classList.remove('presente');
+                cella.classList.add('assente');
+            } else {
+                cella.classList.remove('assente');
+            }
+            
+            // Aggiorna il totale della riga
+            aggiornaTotale(cella.parentElement);
+            
+            // Salva lo stato corrente
+            salvaStato();
+        }
+
+        // Funzione per aggiornare il totale della riga
+        function aggiornaTotale(riga) {
+            const celle = riga.getElementsByTagName('td');
+            let totale = 0;
+            
+            for (let cella of celle) {
+                if (cella.classList.contains('assente')) {
+                    totale++;
+                }
+            }
+            
+            // Aggiorna la cella del totale
+            const cellaTotale = riga.querySelector('.totale');
+            cellaTotale.textContent = totale;
+        }
+
+        function salvaStato() {
+            const tbody = document.querySelector('tbody');
+            const righe = tbody.getElementsByTagName('tr');
+            const stato = [];
+
+            // Salva lo stato di ogni cella per ogni operatore
+            for (let riga of righe) {
+                const operatore = riga.querySelector('.nome-operatore').textContent;
+                const celle = riga.getElementsByTagName('td');
+                const giorni = [];
+
+                for (let i = 1; i < celle.length - 1; i++) { // Escludi nome operatore e totale
+                    giorni.push({
+                        giorno: i,
+                        presente: celle[i].classList.contains('presente'),
+                        assente: celle[i].classList.contains('assente')
+                    });
+                }
+
+                stato.push({
+                    operatore: operatore,
+                    giorni: giorni
+                });
+            }
+
+            localStorage.setItem('calendarioStato', JSON.stringify(stato));
+        }
+
+        function ripristinaStato() {
+            const operatori = [
+                {nome: "Amodio", key: "disponibilitaAmodio", riga: 0},
+                {nome: "Argirò", key: "disponibilitaArgiro", riga: 1},
+                {nome: "Barbieri", key: "disponibilitaBarbieri", riga: 2},
+                {nome: "Bianchi", key: "disponibilitaBianchi", riga: 3},
+                {nome: "Bruno", key: "disponibilitaBruno", riga: 4},
+                {nome: "Danza", key: "disponibilitaDanza", riga: 5},
+                {nome: "De Pinto", key: "disponibilitaDePinto", riga: 6},
+                {nome: "Lumini", key: "disponibilitaLumini", riga: 7},
+                {nome: "Marcozzi", key: "disponibilitaMarcozzi", riga: 8},
+                {nome: "Marucci", key: "disponibilitaMarucci", riga: 9},
+                {nome: "Marziali", key: "disponibilitaMarziali", riga: 10},
+                {nome: "Portieri", key: "disponibilitaPortieri", riga: 11},
+                {nome: "Priori", key: "disponibilitaPriori", riga: 12},
+                {nome: "Pucci", key: "disponibilitaPucci", riga: 13},
+                {nome: "Quaranta", key: "disponibilitaQuaranta", riga: 14},
+                {nome: "Sarcinelli", key: "disponibilitaSarcinelli", riga: 15},
+                {nome: "Sasso", key: "disponibilitaSasso", riga: 16},
+                {nome: "Stivaletta", key: "disponibilitaStivaletta", riga: 17},
+                {nome: "Zaccaria", key: "disponibilitaZaccaria", riga: 18}
+            ];
+
+            operatori.forEach(operatore => {
+                const disponibilita = localStorage.getItem(operatore.key);
+                if (disponibilita) {
+                    const dati = JSON.parse(disponibilita);
+                    const rigaOperatore = document.querySelector(`tbody tr:nth-child(${operatore.riga + 1})`);
+                    
+                    if (rigaOperatore) {
+                        const celle = rigaOperatore.getElementsByTagName('td');
+                        
+                        // Reset di tutte le celle
+                        for (let i = 1; i < celle.length - 1; i++) {
+                            celle[i].classList.remove('presente', 'assente');
+                        }
+                        
+                        // Applica i nuovi stati
+                        dati.forEach(dato => {
+                            const indice = dato.giorno;
+                            if (indice > 0 && indice < celle.length - 1) {
+                                const cella = celle[indice];
+                                if (cella) {
+                                    if (dato.disponibile) {
+                                        cella.classList.add('assente'); // blu = disponibile
+                                    } else if (dato.nonDisponibile) {
+                                        cella.classList.add('presente'); // rosso = non disponibile
+                                    }
+                                }
+                            }
+                        });
+                        
+                        aggiornaTotale(rigaOperatore);
+                    }
+                }
+            });
+        }
+
+        // Aggiungi listener per tutti gli operatori
+        window.addEventListener('storage', function(e) {
+            if (e.key && e.key.startsWith('disponibilita')) {
+                ripristinaStato();
+            }
+        });
+
+        // Modifica l'event listener DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', () => {
+            generaIntestazione();
+            generaTabella();
+            console.log('Caricamento iniziale');
+            ripristinaStato();
+        });
+    </script>
+</body>
+</html> 

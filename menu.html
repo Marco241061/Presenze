@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operatori Barbieri Communication</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f8f9fa;
+            color: #2d3436;
+        }
+
+        .header {
+            display: flex;
+            align-items: center; /* Allinea verticalmente */
+            justify-content: space-between; /* Spazio tra immagine, titolo e box */
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            color: #2d3436;
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            text-decoration: underline;
+            margin-left: 20px; /* Spazio tra l'immagine e il titolo */
+        }
+
+        .presenze-box {
+            background-color: #28a745;
+            border-radius: 8px;
+            padding: 5px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            max-width: 120px; /* Larghezza massima del box */
+        }
+
+        .presenze-box:hover {
+            background-color: #218838;
+        }
+
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Due colonne */
+            gap: 15px; /* Aumenta lo spazio tra le colonne */
+        }
+
+        .menu-item {
+            background-color: #90ee90;
+            border-radius: 8px;
+            padding: 5px; /* Riduci il padding per rendere il box più piccolo */
+            text-align: center;
+            transition: background-color 0.3s;
+            color: #2d3436;
+            min-width: 60px; /* Larghezza minima del box */
+            max-width: 80px; /* Riduci la larghezza massima del box */
+        }
+
+        .menu-item:hover {
+            background-color: #76c76a;
+        }
+
+        .menu-link {
+            text-decoration: none;
+            color: #2d3436;
+            font-weight: 500;
+            display: block;
+            height: 100%;
+        }
+
+        .menu-link:hover {
+            text-decoration: underline;
+        }
+
+        .disegno-image {
+            max-width: 100px; /* Dimensione dell'immagine */
+            height: auto; /* Mantiene le proporzioni */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="imagine/disegno.png" alt="Disegno" class="disegno-image">
+        <h1 class="page-title"><strong>Operatori Barbieri Communication</strong></h1>
+        <div class="presenze-box" onclick="window.open('assenze.html', '_blank')">Presenze Mensili</div>
+    </div>
+
+    <div class="menu-container">
+        <div class="menu-item"><a href="roberto_amodio.html" class="menu-link" target="_blank">Amodio</a></div>
+        <div class="menu-item"><a href="argiro.html" class="menu-link" target="_blank">Argirò</a></div>
+        <div class="menu-item"><a href="barbieri.html" class="menu-link" target="_blank">Barbieri</a></div>
+        <div class="menu-item"><a href="bianchi.html" class="menu-link" target="_blank">Bianchi</a></div>
+        <div class="menu-item"><a href="bruno.html" class="menu-link" target="_blank">Bruno</a></div>
+        <div class="menu-item"><a href="danza.html" class="menu-link" target="_blank">Danza</a></div>
+        <div class="menu-item"><a href="de_pinto.html" class="menu-link" target="_blank">De Pinto</a></div>
+        <div class="menu-item"><a href="marcozzi.html" class="menu-link" target="_blank">Marcozzi</a></div>
+        <div class="menu-item"><a href="marucci.html" class="menu-link" target="_blank">Marucci</a></div>
+        <div class="menu-item"><a href="marziali.html" class="menu-link" target="_blank">Marziali</a></div>
+        <div class="menu-item"><a href="portieri.html" class="menu-link" target="_blank">Portieri</a></div>
+        <div class="menu-item"><a href="priori.html" class="menu-link" target="_blank">Priori</a></div>
+        <div class="menu-item"><a href="pucci.html" class="menu-link" target="_blank">Pucci</a></div>
+        <div class="menu-item"><a href="quaranta.html" class="menu-link" target="_blank">Quaranta</a></div>
+        <div class="menu-item"><a href="sarcinelli.html" class="menu-link" target="_blank">Sarcinelli</a></div>
+        <div class="menu-item"><a href="sasso.html" class="menu-link" target="_blank">Sasso</a></div>
+        <div class="menu-item"><a href="stivaletta.html" class="menu-link" target="_blank">Stivaletta</a></div>
+        <div class="menu-item"><a href="zaccaria.html" class="menu-link" target="_blank">Zaccaria</a></div>
+    </div>
+</body>
+</html> 

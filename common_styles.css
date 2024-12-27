@@ -1,0 +1,60 @@
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #f6f8fb 0%, #e9f0f7 100%);
+    color: #2d3436;
+    min-height: 100vh;
+}
+
+.header-container {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.page-title {
+    color: #2d3436;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.save-button {
+    background: linear-gradient(135deg, #00b894 0%, #00d1a1 100%);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,184,148,0.3);
+}
+
+.save-button:hover {
+    background: linear-gradient(135deg, #00a187 0%, #00c194 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,184,148,0.4);
+}
+
+.calendar-container {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.custom-checkbox, .custom-x-box {
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.custom-checkbox:hover, .custom-x-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+} 

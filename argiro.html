@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marco Argirò - Disponibilità</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f8f9fa;
+            color: #2d3436;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #2d3436;
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .legend {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .legend-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-text {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .calendar-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .month {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .month:hover {
+            transform: translateY(-2px);
+        }
+
+        .month-title {
+            text-align: center;
+            color: #2d3436;
+            margin-bottom: 25px;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .day-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .day-container:hover {
+            background-color: #f8f9fa;
+        }
+
+        .day-box {
+            background-color: transparent;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            flex-grow: 1;
+            border: none;
+        }
+
+        .weekend {
+            color: #e74c3c;
+        }
+
+        .checkbox-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .custom-checkbox,
+        .custom-x-box {
+            width: 24px;
+            height: 24px;
+            border: 2px solid;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .custom-checkbox {
+            border-color: #4299e1;
+        }
+
+        .custom-x-box {
+            border-color: #e74c3c;
+        }
+
+        .custom-checkbox.checked {
+            background-color: #4299e1;
+            border-color: #4299e1;
+        }
+
+        .custom-x-box.checked {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .custom-checkbox.checked::after,
+        .custom-x-box.checked::after {
+            position: absolute;
+            color: white;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .custom-checkbox.checked::after {
+            content: '✓';
+        }
+
+        .custom-x-box.checked::after {
+            content: '✕';
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .save-button {
+            background-color: #00b894;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0,184,148,0.2);
+        }
+
+        .save-button:hover {
+            background-color: #00a187;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,184,148,0.3);
+        }
+
+        .save-button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .calendar-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .month {
+                padding: 20px;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <h1 class="page-title">Operatore Argirò</h1>
+    <div class="legend">
+        <div class="legend-item">
+            <span class="legend-text blue-text">Casella blu: disponibile</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-text red-text">Casella rossa: non disponibile</span>
+        </div>
+    </div>
+    <div class="calendar-container">
+        <div class="month">
+            <h2 class="month-title"></h2>
+            <div class="days" id="mese-corrente"></div>
+        </div>
+
+        <div class="month">
+            <h2 class="month-title"></h2>
+            <div class="days" id="mese-successivo"></div>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button class="save-button" onclick="salvaEAggiorna()">Salva ed Invia</button>
+    </div>
+
+    <script>
+        const mesi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 
+                     'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
+
+        const oggi = new Date();
+        const meseCorrente = oggi.getMonth();
+        const anno = oggi.getFullYear();
+
+        function createDays(containerId, year, month) {
+            const container = document.getElementById(containerId);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayContainer = document.createElement('div');
+                dayContainer.className = 'day-container';
+                
+                const dayBox = document.createElement('div');
+                dayBox.className = 'day-box';
+                
+                const date = new Date(year, month, i);
+                const options = { weekday: 'long', day: 'numeric' };
+                dayBox.textContent = date.toLocaleDateString('it-IT', options).toUpperCase();
+                
+                const giorno = date.getDay();
+                if (giorno === 0 || giorno === 6) {
+                    dayBox.classList.add('weekend');
+                }
+                
+                const checkboxContainer = document.createElement('div');
+                checkboxContainer.className = 'checkbox-container';
+                
+                const checkbox = document.createElement('div');
+                checkbox.className = 'custom-checkbox';
+                checkbox.onclick = function() {
+                    if (!this.nextElementSibling.classList.contains('checked')) {
+                        this.classList.toggle('checked');
+                        updateDisponibilita();
+                    }
+                };
+                
+                const xBox = document.createElement('div');
+                xBox.className = 'custom-x-box';
+                xBox.onclick = function() {
+                    if (!this.previousElementSibling.classList.contains('checked')) {
+                        this.classList.toggle('checked');
+                        updateDisponibilita();
+                    }
+                };
+                
+                checkboxContainer.appendChild(checkbox);
+                checkboxContainer.appendChild(xBox);
+                
+                dayContainer.appendChild(dayBox);
+                dayContainer.appendChild(checkboxContainer);
+                container.appendChild(dayContainer);
+            }
+        }
+
+        function updateDisponibilita() {
+            const meseCorrente = document.querySelector('.month:first-child .month-title').textContent;
+            if (!meseCorrente.includes('Dicembre')) return;
+            
+            let disponibilitaArgiro = JSON.parse(localStorage.getItem('disponibilitaArgiro')) || [];
+            
+            const giorni = document.querySelector('#mese-corrente').querySelectorAll('.day-container');
+            
+            giorni.forEach(giorno => {
+                const data = giorno.querySelector('.day-box').textContent;
+                const numeroGiorno = parseInt(data.split(' ')[1]);
+                const spuntaBlu = giorno.querySelector('.custom-checkbox').classList.contains('checked');
+                const spuntaRossa = giorno.querySelector('.custom-x-box').classList.contains('checked');
+                
+                const giornoEsistente = disponibilitaArgiro.findIndex(g => g.giorno === numeroGiorno);
+                if (giornoEsistente !== -1) {
+                    disponibilitaArgiro[giornoEsistente] = {
+                        giorno: numeroGiorno,
+                        disponibile: spuntaBlu,
+                        nonDisponibile: spuntaRossa
+                    };
+                } else {
+                    disponibilitaArgiro.push({
+                        giorno: numeroGiorno,
+                        disponibile: spuntaBlu,
+                        nonDisponibile: spuntaRossa
+                    });
+                }
+            });
+
+            localStorage.setItem('disponibilitaArgiro', JSON.stringify(disponibilitaArgiro));
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'disponibilitaArgiro',
+                newValue: JSON.stringify(disponibilitaArgiro),
+                url: window.location.href
+            }));
+        }
+
+        function salvaEAggiorna() {
+            const meseCorrente = document.querySelector('.month:first-child .month-title').textContent;
+            if (!meseCorrente.includes('Dicembre')) {
+                alert('Le modifiche sono consentite solo per il mese di Dicembre');
+                return;
+            }
+            
+            updateDisponibilita();
+
+            const messaggio = 'Effettuate modifiche per Marco Argirò';
+            alert(messaggio);
+
+            try {
+                const mailtoLink = `mailto:marcocecconi1@alice.it?subject=Notifica%20Modifiche&body=${encodeURIComponent(messaggio)}`;
+                const link = document.createElement('a');
+                link.href = mailtoLink;
+                link.click();
+            } catch (error) {
+                console.error('Errore nell\'apertura del client di posta:', error);
+                window.location.href = `mailto:marcocecconi1@alice.it?subject=Notifica%20Modifiche&body=${encodeURIComponent(messaggio)}`;
+            }
+        }
+
+        function ripristinaStati() {
+            const stati = JSON.parse(localStorage.getItem('disponibilitaArgiro'));
+            if (!stati) return;
+
+            const giorni = document.querySelectorAll('.day-container');
+            giorni.forEach((giorno) => {
+                const data = giorno.querySelector('.day-box').textContent;
+                const numeroGiorno = parseInt(data.split(' ')[1]);
+                const stato = stati.find(s => s.giorno === numeroGiorno);
+                
+                if (stato) {
+                    const checkboxBlu = giorno.querySelector('.custom-checkbox');
+                    const checkboxRossa = giorno.querySelector('.custom-x-box');
+                    
+                    if (stato.disponibile) checkboxBlu.classList.add('checked');
+                    if (stato.nonDisponibile) checkboxRossa.classList.add('checked');
+                }
+            });
+        }
+
+        function inizializzaCalendario() {
+            document.querySelector('.month:first-child .month-title').textContent = 
+                `${mesi[meseCorrente]} ${anno}`;
+            
+            document.querySelector('.month:last-child .month-title').textContent = 
+                `${mesi[(meseCorrente + 1) % 12]} ${meseCorrente === 11 ? anno + 1 : anno}`;
+
+            createDays('mese-corrente', anno, meseCorrente);
+            createDays('mese-successivo', meseCorrente === 11 ? anno + 1 : anno, (meseCorrente + 1) % 12);
+            
+            setTimeout(ripristinaStati, 100);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            inizializzaCalendario();
+        });
+    </script>
+</body>
+</html> 
