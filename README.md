@@ -1,1 +1,1 @@
-Aggiungere la disponibilità mensile mettendo una spunta sulla casella blu, altrimenti se si è indispobili spuntare la casella rossa.
+Disponibilità mensile. Spuntare i giorni in cui si è disponibili e inviare email di modifica.
